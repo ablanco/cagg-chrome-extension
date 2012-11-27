@@ -1,0 +1,105 @@
+<!-- Chromium Extension. A notifier for http://www.comicagg.com
+     Copyright (C) <2009>  Alejandro Blanco
+
+     This program is free software: you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     (at your option) any later version.
+
+     This program is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU General Public License for more details.
+
+     You should have received a copy of the GNU General Public License
+     along with this program.  If not, see <http://www.gnu.org/licenses/>.-->
+
+<html>
+<head>
+<script>
+function popupInit()
+{
+    //Internationalization
+    document.getElementById('cagg.title').textContent = chrome.i18n.getMessage("extName");
+    document.getElementById('cagg.luser').textContent = chrome.i18n.getMessage("userName");
+    document.getElementById('cagg.oweb').textContent = chrome.i18n.getMessage("openWeb");
+    document.getElementById('cagg.force').textContent = chrome.i18n.getMessage("force");
+    document.getElementById('cagg.user').textContent = chrome.i18n.getMessage("unset");
+    document.getElementById('cagg.empty').textContent = chrome.i18n.getMessage("notNew");
+
+    populate();
+}
+
+function populate()
+{
+    // Load the notifier user name
+    var user = localStorage['cagg.user'];
+    if (!user) { return; }
+
+    var userLbl = document.getElementById("cagg.user");
+    userLbl.innerText = user;
+
+    var table = document.getElementById("cagg.table");
+
+    // Deleting the old content
+    while (table.hasChildNodes()) { table.removeChild(table.lastChild); }
+
+    var row;
+    var item = document.getElementById("cagg.empty");
+
+    // If there aren't new comics then get out
+    if (chrome.extension.getBackgroundPage().gUnreadComics.length == 0)
+    {
+        item.style.display = "";
+        return;
+    }
+
+    item.style.display = "none";
+
+    // Show the information of each unread comic
+    for (var i = 0; i < chrome.extension.getBackgroundPage().gUnreadComics.length; i++)
+    {
+        row = document.createElement("tr");
+        row.setAttribute("align", "center");
+
+        item = document.createElement("td");
+        item.innerText = chrome.extension.getBackgroundPage().gUnreadComics[i][0];
+        item.style.textAlign = "left";
+        row.appendChild(item);
+
+        item = document.createElement("td");
+        item.innerText = chrome.extension.getBackgroundPage().gUnreadComics[i][1];
+        row.appendChild(item);
+
+        table.appendChild(row);
+    }
+}
+
+function openWebSite()
+{
+    var tab = localStorage['cagg.tab'];
+    if (tab == null) { tab = false; }
+
+    var prop = {
+        "url" : 'http://www.comicagg.com',
+        "selected" : !(tab == "true")
+    }
+    chrome.tabs.create(prop);
+}
+
+function forceUpdate()
+{
+    // Pass the populate function to the updateGet method
+    chrome.extension.getBackgroundPage().updateGet(populate);
+}
+</script>
+</head>
+<body onload="popupInit();" style="width:350px">
+    <h2><img src="images/logo32.png"/>&nbsp;&nbsp;<label id="cagg.title"><label/></h2>
+    <label id="cagg.luser"></label><strong><label id="cagg.user"></label></strong><br/>
+    <div id="cagg.oweb" onclick="openWebSite();" style="cursor: pointer;color: #0000CC;text-decoration: underline;"></div>
+    <div id="cagg.force" onclick="forceUpdate();" style="cursor: pointer;color: #0000CC;text-decoration: underline;"></div><hr/>
+    <div id="cagg.empty"></div>
+    <table id="cagg.table" style="width:330px"></table>
+</body>
+</html>

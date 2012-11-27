@@ -1,0 +1,46 @@
+{
+    "extName": {
+        "message": "Comic Aggregator Notifier",
+        "description": "Extension name"
+    },
+    "extDesc": {
+        "message": "A notifier for Comic Aggregator (http://www.comicagg.com)",
+        "description": "Extension description"
+    },
+    "userName": {
+        "message": "User name: ",
+        "description": "Label"
+    },
+    "refreshing": {
+        "message": "Refreshing time (15 minutes min.): ",
+        "description": "Label"
+    },
+    "newTabs": {
+        "message": "Open new tabs in background?: ",
+        "description": "Label"
+    },
+    "save": {
+        "message": "Save changes",
+        "description": "Button"
+    },
+    "done": {
+        "message": "Done!",
+        "description": "JavaScript alert"
+    },
+    "openWeb": {
+        "message": "Open Comic Aggregator webpage",
+        "description": "Div"
+    },
+    "force": {
+        "message": "Force an update of unread comics",
+        "description": "Div"
+    },
+    "unset": {
+        "message": "You have to set this first at the options page",
+        "description": "Label"
+    },
+    "notNew": {
+        "message": "There is nothing new to read",
+        "description": "Div"
+    }
+}

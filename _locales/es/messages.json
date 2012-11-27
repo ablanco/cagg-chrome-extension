@@ -1,0 +1,46 @@
+{
+    "extName": {
+        "message": "Notificador para Comic Aggregator",
+        "description": "Nombre de la extensión"
+    },
+    "extDesc": {
+        "message": "Un notificador para Comic Aggregator (http://www.comicagg.com)",
+        "description": "Descripción de la extensión"
+    },
+    "userName": {
+        "message": "Nombre de usuario: ",
+        "description": "Etiqueta"
+    },
+    "refreshing": {
+        "message": "Tiempo de refresco (15 minutos mín.): ",
+        "description": "Etiqueta"
+    },
+    "newTabs": {
+        "message": "¿Abrir nuevas pestañas en segundo plano?: ",
+        "description": "Etiqueta"
+    },
+    "save": {
+        "message": "Guardar cambios",
+        "description": "Botón"
+    },
+    "done": {
+        "message": "¡Completado!",
+        "description": "Alerta de JavaScript"
+    },
+    "openWeb": {
+        "message": "Abrir la página web de Comic Aggregator",
+        "description": "Div"
+    },
+    "force": {
+        "message": "Forzar una actualización de la lista de cómics sin leer",
+        "description": "Div"
+    },
+    "unset": {
+        "message": "Debes introducir un nombre de usuario en la página de opciones",
+        "description": "Etiqueta"
+    },
+    "notNew": {
+        "message": "No hay nada nuevo que leer",
+        "description": "Div"
+    }
+}
