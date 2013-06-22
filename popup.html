@@ -15,94 +15,21 @@
      along with this program.  If not, see <http://www.gnu.org/licenses/>.-->
 
 <html>
-<head>
-<script>
-function popupInit() {
-    //Internationalization
-    document.getElementById('cagg.title').textContent = chrome.i18n.getMessage("extName");
-    document.getElementById('cagg.luser').textContent = chrome.i18n.getMessage("userName");
-    document.getElementById('cagg.oweb').textContent = chrome.i18n.getMessage("openWeb");
-    document.getElementById('cagg.force').textContent = chrome.i18n.getMessage("force");
-    document.getElementById('cagg.user').textContent = chrome.i18n.getMessage("unset");
-    document.getElementById('cagg.empty').textContent = chrome.i18n.getMessage("notNew");
-
-    populate();
-}
-
-function populate() {
-    var user,
-        userLbl,
-        table,
-        row,
-        item,
-        i;
-
-    // Load the notifier user name
-    user = localStorage['cagg.user'];
-    if (!user) { return; }
-
-    userLbl = document.getElementById("cagg.user");
-    userLbl.innerText = user;
-
-    table = document.getElementById("cagg.table");
-
-    // Deleting the old content
-    while (table.hasChildNodes()) {
-        table.removeChild(table.lastChild);
-    }
-
-    item = document.getElementById("cagg.empty");
-
-    // If there aren't new comics then get out
-    if (chrome.extension.getBackgroundPage().gUnreadComics.length === 0) {
-        item.style.display = "";
-        return;
-    }
-
-    item.style.display = "none";
-
-    // Show the information of each unread comic
-    for (i = 0; i < chrome.extension.getBackgroundPage().gUnreadComics.length; i += 1) {
-        row = document.createElement("tr");
-        row.setAttribute("align", "center");
-
-        item = document.createElement("td");
-        item.innerText = chrome.extension.getBackgroundPage().gUnreadComics[i][0];
-        item.style.textAlign = "left";
-        row.appendChild(item);
-
-        item = document.createElement("td");
-        item.innerText = chrome.extension.getBackgroundPage().gUnreadComics[i][1];
-        row.appendChild(item);
-
-        table.appendChild(row);
-    }
-}
-
-function openWebSite() {
-    var tab,
-        prop;
-
-    tab = localStorage['cagg.tab'];
-    prop = {
-        "url" : 'http://www.comicagg.com',
-        "selected" : !(tab == "true")
-    }
-    chrome.tabs.create(prop);
-}
-
-function forceUpdate() {
-    // Pass the populate function to the updateGet method
-    chrome.extension.getBackgroundPage().updateGet(populate);
-}
-</script>
-</head>
-<body onload="popupInit();" style="width:350px">
-    <h2><img src="images/logo32.png"/>&nbsp;&nbsp;<label id="cagg.title"><label/></h2>
-    <label id="cagg.luser"></label><strong><label id="cagg.user"></label></strong><br/>
-    <div id="cagg.oweb" onclick="openWebSite();" style="cursor: pointer;color: #0000CC;text-decoration: underline;"></div>
-    <div id="cagg.force" onclick="forceUpdate();" style="cursor: pointer;color: #0000CC;text-decoration: underline;"></div><hr/>
-    <div id="cagg.empty"></div>
-    <table id="cagg.table" style="width:330px"></table>
-</body>
+    <head>
+        <script src="/js/ready.min.js" type="text/javascript"></script>
+        <script src="/js/popup.js" type="text/javascript"></script>
+    </head>
+    <body style="width:350px">
+        <h2>
+            <img src="images/logo32.png"/>&nbsp;&nbsp;<label id="cagg.title"><label/>
+        </h2>
+        <label id="cagg.luser"></label>
+        <strong>
+            <label id="cagg.user"></label>
+        </strong><br/>
+        <div id="cagg.oweb" style="cursor: pointer;color: #0000CC;text-decoration: underline;"></div>
+        <div id="cagg.force" style="cursor: pointer;color: #0000CC;text-decoration: underline;"></div><hr/>
+        <div id="cagg.empty"></div>
+        <table id="cagg.table" style="width:330px"></table>
+    </body>
 </html>

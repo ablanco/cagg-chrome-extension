@@ -15,92 +15,16 @@
      along with this program.  If not, see <http://www.gnu.org/licenses/>.-->
 
 <html>
-<head><title>Comic Aggregator Notifier Options</title>
-<script type="text/javascript">
-
-var userName,
-    timer,
-    tabBackground;
-
-function preferencesInit() {
-    var user,
-        tab,
-        time;
-
-    // Internationalization
-    document.getElementById('cagg.luser').textContent = chrome.i18n.getMessage("userName");
-    document.getElementById('cagg.ltime').textContent = chrome.i18n.getMessage("refreshing");
-    document.getElementById('cagg.ltab').textContent = chrome.i18n.getMessage("newTabs");
-    document.getElementById('cagg.save').textContent = chrome.i18n.getMessage("save");
-
-    userName = document.getElementById('cagg.user');
-    timer = document.getElementById('cagg.time');
-    tabBackground = document.getElementById('cagg.tab');
-
-    user = localStorage['cagg.user'];
-    if (!user) {
-        userName.value = '';
-    } else {
-        userName.value = user;
-    }
-
-    tab = localStorage['cagg.tab'];
-    if (tab == null) {
-        tabBackground.checked = false;
-    } else {
-        tabBackground.checked = (tab == "true");
-    }
-
-    time = localStorage['cagg.time'];
-    if (!time) {
-        timer.value = 15;
-    } else {
-        timer.value = time;
-    }
-}
-
-function savePreferences() {
-    var oldUser,
-        cPref,
-        sPref,
-        sWork,
-        iPref,
-        j;
-
-    oldUser = localStorage['cagg.user'];
-    localStorage['cagg.user'] = userName.value;
-    localStorage['cagg.tab'] = tabBackground.checked;
-
-    cPref = '';
-    sPref = timer.value.replace(/^[0]*/);
-    sWork = "0123456789";
-    for (j = 0; j < sPref.length; j += 1) {
-        if (sWork.indexOf(sPref.charAt(j)) != -1) {
-            cPref = cPref + sPref.charAt(j);
-        }
-    }
-    if (cPref.length == 0 ) cPref = '0';
-    iPref = parseInt(cPref);
-    if (iPref < 15) {
-        iPref = 15;
-    }
-    localStorage['cagg.time'] = iPref;
-    timer.value = iPref;
-
-    if (oldUser != userName.value) {
-        chrome.extension.getBackgroundPage().updateGet(false);
-    }
-
-    alert(chrome.i18n.getMessage("done"));
-}
-
-</script>
-</head>
-<body onload="preferencesInit()">
-    <label id="cagg.luser" for="cagg.user"></label><input type="text" id="cagg.user"/><br/>
-    <label id="cagg.ltime" for="cagg.time"></label><input type="text" id="cagg.time"/><br/>
-    <label id="cagg.ltab" for="cagg.tab"></label><input type="checkbox" id="cagg.tab"/><br/>
-    <br/>
-    <button id="cagg.save" onclick="savePreferences()"></button>
-</body>
+    <head>
+        <title>Comic Aggregator Notifier Options</title>
+        <script src="/js/ready.min.js" type="text/javascript"></script>
+        <script src="/js/pref.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <label id="cagg.luser" for="cagg.user"></label><input type="text" id="cagg.user"/><br/>
+        <label id="cagg.ltime" for="cagg.time"></label><input type="text" id="cagg.time"/><br/>
+        <label id="cagg.ltab" for="cagg.tab"></label><input type="checkbox" id="cagg.tab"/><br/>
+        <br/>
+        <button id="cagg.save"></button>
+    </body>
 </html>
