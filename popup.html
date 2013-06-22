@@ -17,8 +17,7 @@
 <html>
 <head>
 <script>
-function popupInit()
-{
+function popupInit() {
     //Internationalization
     document.getElementById('cagg.title').textContent = chrome.i18n.getMessage("extName");
     document.getElementById('cagg.luser').textContent = chrome.i18n.getMessage("userName");
@@ -30,26 +29,32 @@ function popupInit()
     populate();
 }
 
-function populate()
-{
+function populate() {
+    var user,
+        userLbl,
+        table,
+        row,
+        item,
+        i;
+
     // Load the notifier user name
-    var user = localStorage['cagg.user'];
+    user = localStorage['cagg.user'];
     if (!user) { return; }
 
-    var userLbl = document.getElementById("cagg.user");
+    userLbl = document.getElementById("cagg.user");
     userLbl.innerText = user;
 
-    var table = document.getElementById("cagg.table");
+    table = document.getElementById("cagg.table");
 
     // Deleting the old content
-    while (table.hasChildNodes()) { table.removeChild(table.lastChild); }
+    while (table.hasChildNodes()) {
+        table.removeChild(table.lastChild);
+    }
 
-    var row;
-    var item = document.getElementById("cagg.empty");
+    item = document.getElementById("cagg.empty");
 
     // If there aren't new comics then get out
-    if (chrome.extension.getBackgroundPage().gUnreadComics.length == 0)
-    {
+    if (chrome.extension.getBackgroundPage().gUnreadComics.length === 0) {
         item.style.display = "";
         return;
     }
@@ -57,8 +62,7 @@ function populate()
     item.style.display = "none";
 
     // Show the information of each unread comic
-    for (var i = 0; i < chrome.extension.getBackgroundPage().gUnreadComics.length; i++)
-    {
+    for (i = 0; i < chrome.extension.getBackgroundPage().gUnreadComics.length; i += 1) {
         row = document.createElement("tr");
         row.setAttribute("align", "center");
 
@@ -75,20 +79,19 @@ function populate()
     }
 }
 
-function openWebSite()
-{
-    var tab = localStorage['cagg.tab'];
-    if (tab == null) { tab = false; }
+function openWebSite() {
+    var tab,
+        prop;
 
-    var prop = {
+    tab = localStorage['cagg.tab'];
+    prop = {
         "url" : 'http://www.comicagg.com',
         "selected" : !(tab == "true")
     }
     chrome.tabs.create(prop);
 }
 
-function forceUpdate()
-{
+function forceUpdate() {
     // Pass the populate function to the updateGet method
     chrome.extension.getBackgroundPage().updateGet(populate);
 }

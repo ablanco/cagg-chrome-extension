@@ -18,13 +18,15 @@
 <head><title>Comic Aggregator Notifier Options</title>
 <script type="text/javascript">
 
-// Elements of the windows
-var userName;
-var timer;
-var tabBackground;
+var userName,
+    timer,
+    tabBackground;
 
-function preferencesInit()
-{
+function preferencesInit() {
+    var user,
+        tab,
+        time;
+
     // Internationalization
     document.getElementById('cagg.luser').textContent = chrome.i18n.getMessage("userName");
     document.getElementById('cagg.ltime').textContent = chrome.i18n.getMessage("refreshing");
@@ -35,39 +37,59 @@ function preferencesInit()
     timer = document.getElementById('cagg.time');
     tabBackground = document.getElementById('cagg.tab');
 
-    var user = localStorage['cagg.user'];
-    if (!user) { userName.value = ''; }
-    else { userName.value = user; }
+    user = localStorage['cagg.user'];
+    if (!user) {
+        userName.value = '';
+    } else {
+        userName.value = user;
+    }
 
-    var tab = localStorage['cagg.tab'];
-    if (tab == null) { tabBackground.checked = false; }
-    else { tabBackground.checked = (tab == "true"); }
+    tab = localStorage['cagg.tab'];
+    if (tab == null) {
+        tabBackground.checked = false;
+    } else {
+        tabBackground.checked = (tab == "true");
+    }
 
-    var time = localStorage['cagg.time'];
-    if (!time) { timer.value = 15; }
-    else { timer.value = time; }
+    time = localStorage['cagg.time'];
+    if (!time) {
+        timer.value = 15;
+    } else {
+        timer.value = time;
+    }
 }
 
-function savePreferences()
-{
-    var oldUser = localStorage['cagg.user'];
+function savePreferences() {
+    var oldUser,
+        cPref,
+        sPref,
+        sWork,
+        iPref,
+        j;
+
+    oldUser = localStorage['cagg.user'];
     localStorage['cagg.user'] = userName.value;
     localStorage['cagg.tab'] = tabBackground.checked;
 
-    var cPref = '';
-    var sPref = timer.value.replace(/^[0]*/);
-    var sWork = "0123456789";
-    for (var j = 0; j < sPref.length; j++)
-    {
-        if (sWork.indexOf(sPref.charAt(j)) != -1) { cPref = cPref + sPref.charAt(j); }
+    cPref = '';
+    sPref = timer.value.replace(/^[0]*/);
+    sWork = "0123456789";
+    for (j = 0; j < sPref.length; j += 1) {
+        if (sWork.indexOf(sPref.charAt(j)) != -1) {
+            cPref = cPref + sPref.charAt(j);
+        }
     }
     if (cPref.length == 0 ) cPref = '0';
-    var iPref = parseInt(cPref);
-    if (iPref < 15) iPref = 15;
+    iPref = parseInt(cPref);
+    if (iPref < 15) {
+        iPref = 15;
+    }
     localStorage['cagg.time'] = iPref;
     timer.value = iPref;
 
-    if (oldUser != userName.value) {chrome.extension.getBackgroundPage().updateGet(false);}
+    if (oldUser != userName.value) {
+        chrome.extension.getBackgroundPage().updateGet(false);
+    }
 
     alert(chrome.i18n.getMessage("done"));
 }
