@@ -146,7 +146,7 @@ function updateSet(event) {
     comics = gXMLHttpRequest.responseXML.documentElement.childNodes;
     gUnreadCount = xmlDoc.getAttribute("count");
 
-    if (gUnreadCount === 0) {
+    if (parseInt(gUnreadCount, 10) === 0) {
         chrome.browserAction.setIcon({ path: "images/off.png" });
         chrome.browserAction.setBadgeBackgroundColor({ color: [150, 150, 150, 200] });
     } else {

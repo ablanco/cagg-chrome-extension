@@ -55,33 +55,33 @@ function preferencesInit() {
     }
 }
 
+// From http://underscorejs.org
+// MIT license
+
+function isNumber(obj) {
+    return toString.call(obj) === '[object Number]';
+};
+
+function isNaN(obj) {
+    return isNumber(obj) && obj != +obj;
+};
+
+// End underscorejs
+
 function savePreferences() {
     var oldUser,
-        cPref,
-        sPref,
-        sWork,
-        iPref,
-        j;
+        timePref;
 
     oldUser = localStorage['cagg.user'];
     localStorage['cagg.user'] = userName.value;
     localStorage['cagg.tab'] = tabBackground.checked;
 
-    cPref = '';
-    sPref = timer.value.replace(/^[0]*/);
-    sWork = "0123456789";
-    for (j = 0; j < sPref.length; j += 1) {
-        if (sWork.indexOf(sPref.charAt(j)) != -1) {
-            cPref = cPref + sPref.charAt(j);
-        }
+    timePref = parseInt(timer.value, 10);
+    if (timePref < 15 || isNaN(timePref)) {
+        timePref = 15;
     }
-    if (cPref.length == 0 ) cPref = '0';
-    iPref = parseInt(cPref);
-    if (iPref < 15) {
-        iPref = 15;
-    }
-    localStorage['cagg.time'] = iPref;
-    timer.value = iPref;
+    localStorage['cagg.time'] = timePref;
+    timer.value = timePref;
 
     if (oldUser != userName.value) {
         chrome.extension.getBackgroundPage().updateGet(false);
