@@ -1,3 +1,6 @@
+/*jslint browser: true */
+/*global chrome, domready, toString, alert */
+
 // Chromium Extension. A notifier for http://www.comicagg.com
 // Copyright (C) <2009>  Alejandro Blanco
 //
@@ -14,83 +17,87 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-var userName,
-    timer,
-    tabBackground;
+(function () {
+    "use strict";
 
-function preferencesInit() {
-    var user,
-        tab,
-        time;
+    var userName,
+        timer,
+        tabBackground;
 
-    // Internationalization
-    document.getElementById('cagg.luser').textContent = chrome.i18n.getMessage("userName");
-    document.getElementById('cagg.ltime').textContent = chrome.i18n.getMessage("refreshing");
-    document.getElementById('cagg.ltab').textContent = chrome.i18n.getMessage("newTabs");
-    document.getElementById('cagg.save').textContent = chrome.i18n.getMessage("save");
+    function preferencesInit() {
+        var user,
+            tab,
+            time;
 
-    userName = document.getElementById('cagg.user');
-    timer = document.getElementById('cagg.time');
-    tabBackground = document.getElementById('cagg.tab');
+        // Internationalization
+        document.getElementById('cagg.luser').textContent = chrome.i18n.getMessage("userName");
+        document.getElementById('cagg.ltime').textContent = chrome.i18n.getMessage("refreshing");
+        document.getElementById('cagg.ltab').textContent = chrome.i18n.getMessage("newTabs");
+        document.getElementById('cagg.save').textContent = chrome.i18n.getMessage("save");
 
-    user = localStorage['cagg.user'];
-    if (!user) {
-        userName.value = '';
-    } else {
-        userName.value = user;
+        userName = document.getElementById('cagg.user');
+        timer = document.getElementById('cagg.time');
+        tabBackground = document.getElementById('cagg.tab');
+
+        user = localStorage['cagg.user'];
+        if (!user) {
+            userName.value = '';
+        } else {
+            userName.value = user;
+        }
+
+        tab = localStorage['cagg.tab'];
+        if (tab === null) {
+            tabBackground.checked = false;
+        } else {
+            tabBackground.checked = (tab === "true");
+        }
+
+        time = localStorage['cagg.time'];
+        if (!time) {
+            timer.value = 15;
+        } else {
+            timer.value = time;
+        }
     }
 
-    tab = localStorage['cagg.tab'];
-    if (tab == null) {
-        tabBackground.checked = false;
-    } else {
-        tabBackground.checked = (tab == "true");
+    // From http://underscorejs.org
+    // MIT license
+
+    function isNumber(obj) {
+        return toString.call(obj) === '[object Number]';
     }
 
-    time = localStorage['cagg.time'];
-    if (!time) {
-        timer.value = 15;
-    } else {
-        timer.value = time;
-    }
-}
-
-// From http://underscorejs.org
-// MIT license
-
-function isNumber(obj) {
-    return toString.call(obj) === '[object Number]';
-};
-
-function isNaN(obj) {
-    return isNumber(obj) && obj != +obj;
-};
-
-// End underscorejs
-
-function savePreferences() {
-    var oldUser,
-        timePref;
-
-    oldUser = localStorage['cagg.user'];
-    localStorage['cagg.user'] = userName.value;
-    localStorage['cagg.tab'] = tabBackground.checked;
-
-    timePref = parseInt(timer.value, 10);
-    if (timePref < 15 || isNaN(timePref)) {
-        timePref = 15;
-    }
-    localStorage['cagg.time'] = timePref;
-    timer.value = timePref;
-
-    if (oldUser != userName.value) {
-        chrome.extension.getBackgroundPage().updateGet(false);
+    function isNaN(obj) {
+        return isNumber(obj) && obj !== +obj;
     }
 
-    alert(chrome.i18n.getMessage("done"));
-}
+    // End underscorejs
 
-domready(function () {
-    document.getElementById("cagg.save").addEventListener("click", savePreferences);
-    preferencesInit();
-});
+    function savePreferences() {
+        var oldUser,
+            timePref;
+
+        oldUser = localStorage['cagg.user'];
+        localStorage['cagg.user'] = userName.value;
+        localStorage['cagg.tab'] = tabBackground.checked;
+
+        timePref = parseInt(timer.value, 10);
+        if (timePref < 15 || isNaN(timePref)) {
+            timePref = 15;
+        }
+        localStorage['cagg.time'] = timePref;
+        timer.value = timePref;
+
+        if (oldUser !== userName.value) {
+            chrome.extension.getBackgroundPage().gUpdateGet(false);
+        }
+
+        alert(chrome.i18n.getMessage("done"));
+    }
+
+    domready(function () {
+        document.getElementById("cagg.save").addEventListener("click", savePreferences);
+        preferencesInit();
+    });
+}());
